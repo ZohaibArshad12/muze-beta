@@ -1,0 +1,507 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Booking Confirmation</title>
+  <style>
+      /* -------------------------------------
+          GLOBAL RESETS
+      ------------------------------------- */
+
+      /*All the styling goes here*/
+
+      img {
+          border: none;
+          -ms-interpolation-mode: bicubic;
+          max-width: 100%;
+      }
+
+      body {
+          background-color: #141313;
+          font-family: sans-serif;
+          -webkit-font-smoothing: antialiased;
+          font-size: 14px;
+          line-height: 1.4;
+          margin: 0;
+          padding: 0;
+          -ms-text-size-adjust: 100%;
+          -webkit-text-size-adjust: 100%;
+      }
+
+      table {
+          border-collapse: separate;
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
+          width: 100%; }
+      table td {
+          font-family: sans-serif;
+          font-size: 14px;
+          vertical-align: top;
+          color: #fff;
+      }
+
+      table.data td {
+          border-bottom: 1px solid #444444;
+          padding: 8px;
+      }
+
+      /* -------------------------------------
+          BODY & CONTAINER
+      ------------------------------------- */
+
+      .body {
+          background-color: #141313;
+          width: 100%;
+          color: #fff;
+      }
+
+      /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+      .container {
+          display: block;
+          margin: 0 auto !important;
+          /* makes it centered */
+          max-width: 580px;
+          padding: 10px;
+          width: 580px;
+      }
+
+      /* This should also be a block element, so that it will fill 100% of the .container */
+      .content {
+          box-sizing: border-box;
+          display: block;
+          margin: 0 auto;
+          max-width: 580px;
+          padding: 10px;
+      }
+
+      /* -------------------------------------
+          HEADER, FOOTER, MAIN
+      ------------------------------------- */
+      .main {
+          background: #1b1b1b;
+          border-radius: 3px;
+          width: 100%;
+      }
+
+      .wrapper {
+          box-sizing: border-box;
+          padding: 20px;
+      }
+
+      .content-block {
+          padding-bottom: 10px;
+          padding-top: 10px;
+      }
+
+      .footer {
+          clear: both;
+          margin-top: 10px;
+          text-align: center;
+          width: 100%;
+      }
+      .footer td,
+      .footer p,
+      .footer span,
+      .footer a {
+          color: #999999;
+          font-size: 12px;
+          text-align: center;
+      }
+
+      /* -------------------------------------
+          TYPOGRAPHY
+      ------------------------------------- */
+      h1,
+      h2,
+      h3,
+      h4 {
+          color: #fff;
+          font-family: sans-serif;
+          font-weight: 400;
+          line-height: 1.4;
+          margin: 0;
+          margin-bottom: 30px;
+      }
+
+      h1 {
+          font-size: 35px;
+          font-weight: 300;
+          text-align: center;
+          text-transform: capitalize;
+      }
+
+      p,
+      ul,
+      ol {
+          font-family: sans-serif;
+          font-size: 14px;
+          font-weight: normal;
+          margin: 0;
+          margin-bottom: 15px;
+          color: #fff;
+      }
+      p li,
+      ul li,
+      ol li {
+          list-style-position: inside;
+          margin-left: 5px;
+      }
+
+      a {
+          color: #3498db;
+          text-decoration: underline;
+      }
+
+      /* -------------------------------------
+          BUTTONS
+      ------------------------------------- */
+      .btn {
+          box-sizing: border-box;
+          width: 100%; }
+      .btn > tbody > tr > td {
+          padding-bottom: 15px; }
+      .btn table {
+          width: auto;
+      }
+      .btn table td {
+          background-color: #ffffff;
+          border-radius: 5px;
+          text-align: center;
+      }
+      .btn a {
+          background-color: #ffffff;
+          border: solid 1px #3498db;
+          border-radius: 5px;
+          box-sizing: border-box;
+          color: #3498db;
+          cursor: pointer;
+          display: inline-block;
+          font-size: 14px;
+          font-weight: bold;
+          margin: 0;
+          padding: 12px 25px;
+          text-decoration: none;
+          text-transform: capitalize;
+      }
+
+      .btn-primary table td {
+          background-color: #3498db;
+      }
+
+      .btn-primary a {
+          background-color: #3498db;
+          border-color: #3498db;
+          color: #ffffff;
+      }
+
+      /* -------------------------------------
+          OTHER STYLES THAT MIGHT BE USEFUL
+      ------------------------------------- */
+      .last {
+          margin-bottom: 0;
+      }
+
+      .first {
+          margin-top: 0;
+      }
+
+      .align-center {
+          text-align: center;
+      }
+
+      .align-right {
+          text-align: right;
+      }
+
+      .align-left {
+          text-align: left;
+      }
+
+      .clear {
+          clear: both;
+      }
+
+      .mt0 {
+          margin-top: 0;
+      }
+
+      .mb0 {
+          margin-bottom: 0;
+      }
+
+      .light {
+          color: #9e9e9e;
+      }
+
+      .purple {
+          color: #9575cd;
+      }
+
+      .preheader {
+          color: transparent;
+          display: none;
+          height: 0;
+          max-height: 0;
+          max-width: 0;
+          opacity: 0;
+          overflow: hidden;
+          mso-hide: all;
+          visibility: hidden;
+          width: 0;
+      }
+
+      .powered-by a {
+          text-decoration: none;
+      }
+
+      hr {
+          border: 0;
+          border-bottom: 1px solid #f6f6f6;
+          margin: 20px 0;
+      }
+
+      /* -------------------------------------
+          RESPONSIVE AND MOBILE FRIENDLY STYLES
+      ------------------------------------- */
+      @media only screen and (max-width: 620px) {
+          table[class=body] h1 {
+              font-size: 28px !important;
+              margin-bottom: 10px !important;
+          }
+          table[class=body] p,
+          table[class=body] ul,
+          table[class=body] ol,
+          table[class=body] td,
+          table[class=body] span,
+          table[class=body] a {
+              font-size: 16px !important;
+          }
+          table[class=body] .wrapper,
+          table[class=body] .article {
+              padding: 10px !important;
+          }
+          table[class=body] .content {
+              padding: 0 !important;
+          }
+          table[class=body] .container {
+              padding: 0 !important;
+              width: 100% !important;
+          }
+          table[class=body] .main {
+              border-left-width: 0 !important;
+              border-radius: 0 !important;
+              border-right-width: 0 !important;
+          }
+          table[class=body] .btn table {
+              width: 100% !important;
+          }
+          table[class=body] .btn a {
+              width: 100% !important;
+          }
+          table[class=body] .img-responsive {
+              height: auto !important;
+              max-width: 100% !important;
+              width: auto !important;
+          }
+      }
+
+      /* -------------------------------------
+          PRESERVE THESE STYLES IN THE HEAD
+      ------------------------------------- */
+      @media all {
+          .ExternalClass {
+              width: 100%;
+          }
+          .ExternalClass,
+          .ExternalClass p,
+          .ExternalClass span,
+          .ExternalClass font,
+          .ExternalClass td,
+          .ExternalClass div {
+              line-height: 100%;
+          }
+          .apple-link a {
+              color: inherit !important;
+              font-family: inherit !important;
+              font-size: inherit !important;
+              font-weight: inherit !important;
+              line-height: inherit !important;
+              text-decoration: none !important;
+          }
+          #MessageViewBody a {
+              color: inherit;
+              text-decoration: none;
+              font-size: inherit;
+              font-family: inherit;
+              font-weight: inherit;
+              line-height: inherit;
+          }
+          .btn-primary table td:hover {
+              background-color: #34495e !important;
+          }
+          .btn-primary a:hover {
+              background-color: #34495e !important;
+              border-color: #34495e !important;
+          }
+      }
+
+  </style>
+</head>
+
+<body class="" link="#fbc02d" vlink="#fbc02d">
+<span class="preheader">Thank you for your booking!</span>
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+  <tr>
+    <td>&nbsp;</td>
+    <td class="container">
+      <div class="content">
+
+        <img src="https://muze-music.netlify.app/images/logos/muze-logo.png" alt="MUZE Music" width="140" height="93" border="0" style="border:0; outline:none; text-decoration:none; display:block; margin: 20px auto;">
+
+
+        <!-- START CENTERED WHITE CONTAINER -->
+        <table role="presentation" class="main">
+
+          <!-- START MAIN CONTENT AREA -->
+          <tr>
+            <td class="wrapper">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <h1>Booking Information</h1>
+                    <p class="align-center">Hi {{it.contact_firstname}},</p>
+                    <p class="align-center">Thank you for booking with MUZE! Your complete booking details are below.</p>
+                    <p class="light align-center mb0">Confirmation Code</p>
+                    <h2 class="align-center mt0">{{it.confirmation_code}}</h2>
+
+                    <h3 class="purple mb0 align-center">Event Information</h3>
+                    <table class="data" role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="light align-right" width="40%">Artist</td>
+                        <td>{{it.artist_name}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Date</td>
+                        <td>{{it.date}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Time</td>
+                        <td>{{it.time}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Event Style</td>
+                        <td>
+                          {{it.event_style}}
+                        </td>
+                      </tr>
+                      {{@if(it.event_song_requests.length > 0)}}
+                      <tr>
+                        <td class="light align-right">Song Requests</td>
+                        <td>
+                          {{it.event_song_requests}}
+                        </td>
+                      </tr>
+                      {{/if}}
+                      {{@if(it.event_special_requests.length > 0)}}
+                      <tr>
+                        <td class="light align-right">Special Requests</td>
+                        <td>
+                          {{it.event_special_requests}}
+                        </td>
+                      </tr>
+                      {{/if}}
+                    </table>
+                    <br><br>
+
+                    <h3 class="purple mb0 align-center">Zoom Meeting Information</h3>
+                    <table class="data" role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="light align-right" width="40%">Zoom Meeting ID</td>
+                        <td>{{it.zoom_meeting_identifier}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Zoom Meeting Passcode</td>
+                        <td>{{it.zoom_meeting_passcode}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Zoom Meeting Link</td>
+                        <td><a href="https://us04web.zoom.us/j/{{it.zoom_meeting_identifier}}" target="_blank" style="text-decoration: none !important;"><span style="color: #fbc02d !important; text-decoration: none !important;">[Join Meeting]</span></a></td>
+                      </tr>
+                    </table>
+                    <br><br>
+
+                    <h3 class="purple mb0 align-center">Contact Information</h3>
+                    <table class="data" role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="light align-right" width="40%">First Name</td>
+                        <td>{{it.contact_firstname}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Last Name</td>
+                        <td>{{it.contact_lastname}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Email</td>
+                        <td><a href="mailto:{{it.contact_email}}" style="text-decoration: none !important;"><span style="color: #ffffff !important; text-decoration: none !important;">{{it.contact_email}}</span></a></td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Address</td>
+                        <td>
+                          {{it.contact_address1}}<br/>
+                          {{@if(it.contact_address2.length > 0)}}
+                          {{it.contact_address2}}<br/>
+                          {{/if}}
+                          {{it.contact_city}}, {{it.contact_state}} {{it.contact_zipcode}}
+                        </td>
+                      </tr>
+                    </table>
+                    <br><br>
+
+                    <h3 class="purple mb0 align-center">Payment Information</h3>
+                    <table class="data" role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="light align-right" width="40%">Card</td>
+                        <td>{{it.card_brand}} x{{it.card_last4}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Total Amount</td>
+                        <td>${{it.fee_total}}</td>
+                      </tr>
+                      <tr>
+                        <td class="light align-right">Receipt Link</td>
+                        <td><a href="{{it.card_receipt_url}}" target="_blank" style="text-decoration: none !important;"><span style="color: #fbc02d !important; text-decoration: none !important;">[View Receipt]</span></a></td>
+                      </tr>
+                    </table>
+                    <br><br>
+
+                    <p class="align-center">Thank you for your business!</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- END MAIN CONTENT AREA -->
+        </table>
+        <!-- END CENTERED WHITE CONTAINER -->
+
+        <!-- START FOOTER -->
+        <div class="footer">
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="content-block">
+                <span class="apple-link">MUZE Music Inc., 9A Monument Square, Charlestown, MA 02129</span>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- END FOOTER -->
+
+      </div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</body>
+</html>

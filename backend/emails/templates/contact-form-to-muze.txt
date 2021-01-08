@@ -1,0 +1,12 @@
+A new contact form submission has been received. Details are below.
+
+-----------------
+Form Information
+-----------------
+Name: {{it.name}}
+Email: {{it.email}}
+Message:
+
+{{it.message}}
+
+MUZE Music Inc., 9A Monument Square, Charlestown, MA 02129

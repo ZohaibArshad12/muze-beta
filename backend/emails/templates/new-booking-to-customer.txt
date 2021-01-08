@@ -1,0 +1,50 @@
+Hi {{it.contact_firstname}},
+
+Thank you for booking with MUZE! Your complete booking details are below.
+
+Confirmation Code: {{it.confirmation_code}}
+
+-----------------
+Event Information
+-----------------
+Artist: {{it.artist_name}}
+Date: {{it.date}}
+Time: {{it.time}}
+Event Style: {{it.event_style}}
+{{@if(it.event_song_requests.length > 0)}}
+Song Requests: {{it.event_song_requests}}
+{{/if}}
+{{@if(it.event_special_requests.length > 0)}}
+Special Requests: {{it.event_special_requests}}
+{{/if}}
+
+------------------------
+Zoom Meeting Information
+------------------------
+Zoom Meeting ID: {{it.zoom_meeting_identifier}}
+Zoom Meeting Passcode: {{it.zoom_meeting_passcode}}
+Zoom Meeting Link: https://us04web.zoom.us/j/{{it.zoom_meeting_identifier}}
+
+-------------------
+Contact Information
+-------------------
+First Name: {{it.contact_firstname}}
+Last Name: {{it.contact_lastname}}
+Email: {{it.contact_email}}
+Address:
+{{it.contact_address1}}
+{{@if(it.contact_address2.length > 0)}}
+{{it.contact_address2}}
+{{/if}}
+{{it.contact_city}}, {{it.contact_state}} {{it.contact_zipcode}}
+
+-------------------
+Payment Information
+-------------------
+Card: {{it.card_brand}} x{{it.card_last4}}
+Total Amount: ${{it.fee_total}}
+Receipt Link: {{it.card_receipt_url}}
+
+Thank you for your business!
+
+MUZE Music Inc., 9A Monument Square, Charlestown, MA 02129
