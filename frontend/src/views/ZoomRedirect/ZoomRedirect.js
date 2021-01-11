@@ -84,6 +84,7 @@ const ZoomRedirect = props => {
     } else {
       goTo(history, '');
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

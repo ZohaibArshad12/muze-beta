@@ -11,7 +11,6 @@ import {
   colors, Typography,
 } from '@material-ui/core';
 import { IconAlternate } from 'components/molecules';
-import { Accordion } from 'components/organisms';
 import useTheme from '@material-ui/core/styles/useTheme';
 import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
@@ -82,23 +81,23 @@ const Questions = props => {
           </List>
         </Grid>
         <Grid item xs={12}>
-          <Divider/>
+          <Divider />
         </Grid>
         <Grid item xs={12}>
           <Typography variant={'h5'} gutterBottom>
             Installation
           </Typography>
           <Typography variant={'body1'}>
-            <ol style={{marginLeft: theme.spacing(2)}}>
+            <ol style={{ marginLeft: theme.spacing(2) }}>
               <li>Login to your Zoom account and navigate to the Zoom Marketplace.</li>
-              <li>Search for <strong>Muze Music</strong> and click the app.<br/>
+              <li>Search for <strong>Muze Music</strong> and click the app.<br />
                 <i>Note: If the app is not pre-approved, please contact your Zoom admin to approve this app for your account.</i></li>
               <li>Click <strong>Install</strong>, confirm the permissions the app requires and choose <strong>Authorize</strong>.</li>
             </ol>
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Divider/>
+          <Divider />
         </Grid>
         <Grid item xs={12}>
           <Typography variant={'h5'} gutterBottom>
@@ -112,7 +111,7 @@ const Questions = props => {
             Booking An Artist
           </Typography>
           <Typography variant={'body1'}>
-            <ol style={{marginLeft: theme.spacing(2)}}>
+            <ol style={{ marginLeft: theme.spacing(2) }}>
               <li>Navigate to the <strong>Muze Music</strong> app home page.</li>
               <li>Begin your search by specifying your event date, desired artist type, and genre.</li>
               <li>Click <strong>Search</strong> and select an artist from the results by clicking <strong>Book Now</strong>.</li>
@@ -124,7 +123,7 @@ const Questions = props => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Divider/>
+          <Divider />
         </Grid>
         <Grid item xs={12}>
           <Typography variant={'h5'} gutterBottom>
@@ -135,14 +134,14 @@ const Questions = props => {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Divider/>
+          <Divider />
         </Grid>
         <Grid item xs={12}>
           <Typography variant={'h5'} gutterBottom>
             Uninstall
           </Typography>
           <Typography variant={'body1'}>
-            <ol style={{marginLeft: theme.spacing(2)}}>
+            <ol style={{ marginLeft: theme.spacing(2) }}>
               <li>Login to your Zoom account and navigate to the Zoom Marketplace.</li>
               <li>Click <strong>Manage > Installed Apps</strong> or search for the <strong>Muze Music</strong> app.</li>
               <li>Click <strong>Muze Music</strong> and click <strong>Uninstall</strong>.</li>

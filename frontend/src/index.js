@@ -10,12 +10,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-let stripePromise;
-if (process.env.STRIPE_KEY) {
-  stripePromise = loadStripe(process.env.STRIPE_KEY);
-} else {
-  stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
-}
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
 
 // A function that routes the user to the right place
 // after login

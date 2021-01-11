@@ -1,5 +1,3 @@
-import { colors } from '@material-ui/core';
-
 export const breadcrumb = [
   {
     href: '/',
