@@ -83,10 +83,10 @@ sequelize
 
 // *********************************************
 
-Sequelize.postgres.DECIMAL.parse = function(value) {
+Sequelize.postgres.DECIMAL.parse = function (value) {
   return parseFloat(value);
 };
-Sequelize.postgres.BIGINT.parse = function(value) {
+Sequelize.postgres.BIGINT.parse = function (value) {
   return parseInt(value);
 };
 

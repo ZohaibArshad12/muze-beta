@@ -17,6 +17,7 @@ import {
   Terms as TermsView,
   NotFound as NotFoundView,
   Admin as AdminView,
+  ZoomRedirect as ZoomRedirectView
 } from './views';
 import PrivateRoute from './common/PrivateRoute';
 
@@ -66,6 +67,12 @@ const Routes = () => {
         exact
         layout={MainLayout}
         path="/artists/book/:artistId"
+      />
+      <RouteWithLayout
+        component={ZoomRedirectView}
+        exact
+        layout={MainLayout}
+        path="/redirect"
       />
       <RouteWithLayout
         component={AboutView}

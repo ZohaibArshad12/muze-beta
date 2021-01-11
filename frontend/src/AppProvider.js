@@ -171,6 +171,10 @@ export const AppProvider = ({ children }) => {
     setBookFormValues(defaultBookFormValues);
   };
 
+  const handleSetCompleteBookFormValues = (newBookFormValues) => {
+    setBookFormValues(newBookFormValues);
+  };
+
   const doSearch = async (paramFilterValues) => {
     let myFilterValues = { ...paramFilterValues };
     if (!paramFilterValues) myFilterValues = { ...filterValues };
@@ -235,6 +239,7 @@ export const AppProvider = ({ children }) => {
         handleFilterValuesChange,
         handleBookFormValuesChange,
         handleResetBookFormValues,
+        handleSetCompleteBookFormValues,
         handleSearch,
         doSearch,
         handleSearchAll,

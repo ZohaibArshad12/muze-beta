@@ -10,3 +10,4 @@ export { default as Terms } from './Terms';
 export { default as NotFound } from './NotFound';
 export { default as NotFoundCover } from './NotFoundCover';
 export { default as Admin } from './Admin';
+export { default as ZoomRedirect } from './ZoomRedirect';

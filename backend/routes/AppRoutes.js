@@ -3,6 +3,7 @@ const { checkAccessToken, checkPermission } = require('../middleware/auth.js');
 const { Locations, ArtistTypes, ArtistGenres } = require('../models');
 const Promise = require('bluebird');
 const numbro = require('numbro');
+const axios = require('axios')
 
 // Create Express Router
 const router = express.Router();
@@ -13,16 +14,15 @@ const router = express.Router();
  */
 router.get('/hydrate', (req, res, next) => {
   let calls = [];
-
   calls.push(Locations.findAll());
   calls.push(ArtistTypes.findAll());
   calls.push(ArtistGenres.findAll());
 
   Promise.all(calls).then(([
-                             locations,
-                             artistTypes,
-                             artistGenres,
-                           ]) => {
+    locations,
+    artistTypes,
+    artistGenres,
+  ]) => {
     res.json({
       locations: locations,
       artistTypes: artistTypes,
@@ -67,6 +67,59 @@ router.post(
     }
 
     res.json(result);
+  },
+);
+
+// POST /api/app/zoomCreateMeeting
+// Route for creating zoom meeting for user
+router.post(
+  '/zoomCreateMeeting',
+  async (req, res, next) => {
+    console.log('req.body:', req.body);
+
+    const code = req.body.code;
+    const topic = req.body.topic;
+    const startTime = req.body.startTime;
+    const bookDuration = req.body.bookDuration;
+    const redirectURL = process.env.ZOOM_APP_REDIRECTURL
+    const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
+    let headers = { Authorization: `Basic ${idSecretBase64}` };
+
+    try {
+      const oAuthTokenRes = await axios.post(
+        `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
+        null,
+        { headers }
+      );
+      if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
+        headers = { Authorization: `Bearer ${oAuthTokenRes.data.access_token}` };
+        const body = {
+          topic,
+          "type": 2, // type 2 is schedules meeting
+          "start_time": startTime,
+          "duration": bookDuration,
+          "password": Math.random().toString(36).slice(6), // creates a random password
+          "settings": {
+            "waiting_room": false,
+            "join_before_host": true
+          }
+        }
+
+        const createMeetingRes = await axios.post(
+          `https://api.zoom.us/v2/users/me/meetings`,
+          body,
+          { headers }
+        );
+
+        res.json(createMeetingRes.data)
+      } else {
+        console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
+        next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
+      }
+
+    } catch (error) {
+      next(error);
+    }
   },
 );
 

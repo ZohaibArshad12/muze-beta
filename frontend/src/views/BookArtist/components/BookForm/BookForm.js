@@ -2,11 +2,15 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core';
 import useTheme from '@material-ui/core/styles/useTheme';
 import { makeStyles } from '@material-ui/core/styles';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 import { useApp } from '../../../../AppProvider';
 import { TextField as MuiTextField } from '@material-ui/core';
 import debouncedInput from 'components/molecules/DebouncedInput';
 import validate from 'validate.js';
+import moment from 'moment';
+
+const redirectURL = `${window.location.origin}/redirect`;
+const ZOOM_OAUTH_AUTHENTICATE_URL = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_APP_CLIENTID}&redirect_uri=${redirectURL}`
 
 const randtoken = require('rand-token').generator({
   chars: 'A-Z',
@@ -80,6 +84,7 @@ const BookForm = props => {
   const isMd = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true,
   });
+  const location = useLocation();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -91,7 +96,6 @@ const BookForm = props => {
     touched: {},
     errors: {},
   });
-
   useEffect(() => {
     const errors = validate(formState.values, schema);
 
@@ -134,6 +138,15 @@ const BookForm = props => {
       app.handleBookFormValuesChange({ target: { name: 'confNum', value: confNum } });
     }
   };
+
+  const handleScheduleZoomMeeting = () => {
+    localStorage.setItem('book-artist-form-state', JSON.stringify(app.bookFormValues));
+    localStorage.setItem('url-before-redirect', location.pathname.slice(1, location.pathname.length));
+    localStorage.setItem('event-start-time', `${moment(app.bookFormValues.bookDate).format('yyyy-MM-DD')}T${moment(
+      app.bookFormValues.bookTime
+    ).format('HH:mm:ss')}`);
+    window.location.assign(ZOOM_OAUTH_AUTHENTICATE_URL);
+  }
 
   const hasError = field =>
     (formSubmitted || formState.touched[field]) && formState.errors[field]
@@ -378,7 +391,26 @@ const BookForm = props => {
             variant="subtitle1"
             style={{ color: theme.palette.text.light }}
           >
-            Please provide the following details for the artist to join your event.
+            Schedule with Zoom a meeting for your event.
+          </Typography>
+        </Grid>
+        <Grid item xs={12} data-aos="fade-up">
+          <Button
+            variant="contained"
+            type="submit"
+            color="secondary"
+            size="large"
+            onClick={handleScheduleZoomMeeting}
+          >
+            Schedule with Zoom
+          </Button>
+        </Grid>
+        <Grid item xs={12} data-aos="fade-up">
+          <Typography
+            variant="subtitle1"
+            style={{ color: theme.palette.text.light }}
+          >
+            OR provide the following details for the artist to join your event.
           </Typography>
         </Grid>
         <Grid item xs={6} data-aos="fade-up">
