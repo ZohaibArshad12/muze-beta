@@ -52,8 +52,8 @@ const ZoomRedirect = props => {
           bookDuration: localstorageFormState.bookDuration.value,
         });
 
-        localstorageFormState.zoomMeetingId = meetingResponse.data.id;
-        localstorageFormState.zoomMeetingPasscode = meetingResponse.data.password;
+        localstorageFormState.zoomMeetingId = meetingResponse.data.id.toString();
+        localstorageFormState.zoomMeetingPasscode = meetingResponse.data.password.toString();
         app.handleSetCompleteBookFormValues({ ...localstorageFormState })
 
         const userURLBeforeRedirect = localStorage.getItem('url-before-redirect');
