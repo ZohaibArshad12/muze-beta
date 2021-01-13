@@ -6,10 +6,18 @@ import { Hero } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    background: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('/images/photos/home/hero-bg2.jpg')`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center top'
+    position: 'relative',
+    overflow: 'hidden'
   },
+
+  video: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '99.8%',
+  }
+
 }));
 
 const Home = () => {
@@ -17,6 +25,9 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
+    <video className={classes.video} autoPlay loop muted>
+      <source src='/videos/homepage-video.mp4' type='video/mp4' />
+    </video>
       <Section>
         <Hero />
       </Section>

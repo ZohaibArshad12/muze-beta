@@ -16,12 +16,10 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     minHeight: 400,
+    maxHeight: '60vh',
     objectFit: 'cover',
     borderRadius: "0px 0px 160px 0px",
-    backgroundColor: theme.palette.primary.main,
-    [theme.breakpoints.down('sm')]: {
-      width: 'auto',
-    },
+    backgroundColor: theme.palette.primary.main
   },
   textWhite: {
     color: 'white',
