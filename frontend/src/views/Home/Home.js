@@ -26,7 +26,7 @@ const Home = () => {
   return (
     <div className={classes.root}>
     <video className={classes.video} autoPlay loop muted>
-      <source src='/videos/homepage-video.mp4' type='video/mp4' />
+      <source src='https://player.vimeo.com/external/500153843.hd.mp4?s=f3dcb73c184012a21738f19fda68c2ccc1eb7518&profile_id=175' type='video/mp4' />
     </video>
       <Section>
         <Hero />
