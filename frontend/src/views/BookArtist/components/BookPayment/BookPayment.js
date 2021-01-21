@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { Button, Grid, Link, Typography, useMediaQuery } from '@material-ui/core';
+import { Button, Grid, Link, TextField, Typography, useMediaQuery } from '@material-ui/core';
 import useTheme from '@material-ui/core/styles/useTheme';
 import { makeStyles } from '@material-ui/core/styles';
 import { useApp } from '../../../../AppProvider';
@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -75,6 +76,7 @@ const BookPayment = props => {
     defaultMatches: true,
   });
 
+  const [zoomMeetingError, setZoomMeetingError] = useState('');
   const [stripeError, setStripeError] = useState('');
   const [termsHasError, setTermsHasError] = useState(false);
 
@@ -87,12 +89,19 @@ const BookPayment = props => {
     });
   };
 
+  const handleChange = event => {
+    app.handleBookFormValuesChange(event);
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStripeError('');
     setTermsHasError(false);
 
-
+    if ( zoomMeetingError && !app.bookFormValues.zoomMeetingId) {
+      return;
+    }
+    
     if (!app.bookFormValues.termsAccepted) {
       setTermsHasError(true);
       return;
@@ -102,6 +111,15 @@ const BookPayment = props => {
       // Stripe.js has not yet loaded.
       // Make  sure to disable form submission until Stripe.js has loaded.
       return;
+    }
+
+    if(app.bookFormValues.useZoomAppMeetingFlow) {
+      const success = await createZoomMeeting();
+      if(!success) {
+        app.handleBookFormValuesChange({ target: { name: 'useZoomAppMeetingFlow', value: false } });
+        setZoomMeetingError('Error occured while creating Zoom meeting automatically, Kindly provide one')
+        return;
+      }
     }
 
     const card = elements.getElement(CardElement);
@@ -152,6 +170,28 @@ const BookPayment = props => {
         }, 500);
       }
     });
+  }
+
+  const createZoomMeeting = async  () => {
+    const values = app.bookFormValues;
+    const meetingStartDate = `${moment(values.bookDate).format('yyyy-MM-DD')}T${moment(values.bookTime).format('HH:mm:ss')}`
+    const topic = values.firstname.length > 0 ? `${values.firstname}'s Event` : 'Event';
+
+    try {
+      const meetingResponse = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomCreateMeeting`, {
+        zoomToken: localStorage.getItem('zoom-token'),
+        topic,
+        startTime: meetingStartDate,
+        bookDuration: values.bookDuration.value,
+      });
+    values.zoomMeetingId = meetingResponse.data.id.toString();
+    values.zoomMeetingPasscode = meetingResponse.data.password.toString();
+    app.handleSetCompleteBookFormValues({ ...values });
+    return true
+    } catch(err) {
+      console.log('Error creating zoom meeting', err);
+      return false
+    }
   }
 
   const createBookingRecord = async (chargeResult) => {
@@ -330,26 +370,40 @@ const BookPayment = props => {
             Zoom Meeting Information
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6} data-aos="fade-up">
-          <Typography
-            variant="subtitle1"
-            color="textPrimary"
-            className={classes.inputTitle}
-          >
-            <span className={classes.label}>Zoom Meeting ID</span><br />
-            {app.bookFormValues.zoomMeetingId}
+        {app.bookFormValues.useZoomAppMeetingFlow ?
+
+          <Grid item xs={12} data-aos="fade-up">
+            <Typography
+              variant="subtitle1"
+              color="textPrimary"
+            >
+              Zoom meeting information will be generated once the booking is complete.
           </Typography>
-        </Grid>
-        <Grid item xs={12} md={6} data-aos="fade-up">
-          <Typography
-            variant="subtitle1"
-            color="textPrimary"
-            className={classes.inputTitle}
-          >
-            <span className={classes.label}>Zoom Meeting Passcode</span><br />
-            {app.bookFormValues.zoomMeetingPasscode}
-          </Typography>
-        </Grid>
+          </Grid>
+          :
+          <React.Fragment>
+            <Grid item xs={12} md={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                <span className={classes.label}>Zoom Meeting ID</span><br />
+                {app.bookFormValues.zoomMeetingId}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                <span className={classes.label}>Zoom Meeting Passcode</span><br />
+                {app.bookFormValues.zoomMeetingPasscode}
+              </Typography>
+            </Grid>
+          </React.Fragment>
+        }
         <Grid item xs={12} data-aos="fade-up">
           <Typography
             variant="h6"
@@ -440,6 +494,58 @@ const BookPayment = props => {
             <CardElement options={CARD_ELEMENT_OPTIONS} />
           </div>
         </Grid>
+
+        {zoomMeetingError &&
+          <React.Fragment>
+            <Grid item xs={12} data-aos="fade-up">
+              {zoomMeetingError}
+            </Grid>
+
+            <Grid item xs={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                Zoom Meeting ID*
+              </Typography>
+              <TextField
+                placeholder="Zoom Meeting ID"
+                variant="outlined"
+                size="medium"
+                name="zoomMeetingId"
+                fullWidth
+                type="text"
+                value={app.bookFormValues.zoomMeetingId}
+                onChange={handleChange}
+                helperText={!app.bookFormValues.zoomMeetingId ? 'Zoom meeting Id required' : null}
+                error={!app.bookFormValues.zoomMeetingId}
+                className={classes.textField}
+              />
+            </Grid>
+            <Grid item xs={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                Zoom Meeting Passcode
+              </Typography>
+              <TextField
+                placeholder="Passcode, if any"
+                variant="outlined"
+                size="medium"
+                name="zoomMeetingPasscode"
+                fullWidth
+                type="text"
+                value={app.bookFormValues.zoomMeetingPasscode}
+                onChange={handleChange}
+                className={classes.textField}
+              />
+            </Grid>
+          </React.Fragment>
+        }
+
         <Grid item xs={12} data-aos="fade-up">
           <Typography
             variant="h6"
@@ -451,7 +557,6 @@ const BookPayment = props => {
         <Grid item xs={12} data-aos="fade-up">
           <FormGroup>
             <FormControlLabel
-              error={termsHasError}
               control={<Checkbox checked={app.bookFormValues.termsAccepted} onChange={handleTermsChange}
                                  name="termsAccepted" />}
               label={(
@@ -486,6 +591,7 @@ const BookPayment = props => {
             type="submit"
             color="secondary"
             size="large"
+            disabled={!app.bookFormValues.useZoomAppMeetingFlow && !app.bookFormValues.zoomMeetingId}
             onClick={handleSubmit}
           >
             Continue

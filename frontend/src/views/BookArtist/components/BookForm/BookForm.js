@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useState } from 'react';
-import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core';
+import { Button, Grid, Typography, useMediaQuery,Checkbox, FormGroup, FormControlLabel, FormHelperText } from '@material-ui/core';
 import useTheme from '@material-ui/core/styles/useTheme';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
@@ -87,6 +87,8 @@ const BookForm = props => {
   const location = useLocation();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [zoomAuthTriggered, setZoomAuthTriggered] = useState(false);
+  const [zoomAuthError, setZoomAuthError] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -98,7 +100,6 @@ const BookForm = props => {
   });
   useEffect(() => {
     const errors = validate(formState.values, schema);
-
     setFormState(formState => ({
       ...formState,
       isValid: !errors,
@@ -130,7 +131,16 @@ const BookForm = props => {
 
   const handleNextStep = () => {
     setFormSubmitted(true);
-    const errors = validate(formState.values, schema);
+    if(app.bookFormValues.useZoomAppMeetingFlow) {
+      schema.zoomMeetingId.presence.allowEmpty = true
+    }
+     const errors = validate(formState.values, schema);
+
+    setFormState(formState => ({
+      ...formState,
+      isValid: !errors,
+      errors: errors || {},
+    }));
 
     if (!errors) {
       onNextStep();
@@ -139,13 +149,17 @@ const BookForm = props => {
     }
   };
 
-  const handleScheduleZoomMeeting = () => {
-    localStorage.setItem('book-artist-form-state', JSON.stringify(app.bookFormValues));
-    localStorage.setItem('url-before-redirect', location.pathname.slice(1, location.pathname.length));
-    localStorage.setItem('event-start-time', `${moment(app.bookFormValues.bookDate).format('yyyy-MM-DD')}T${moment(
-      app.bookFormValues.bookTime
-    ).format('HH:mm:ss')}`);
-    window.location.assign(ZOOM_OAUTH_AUTHENTICATE_URL);
+  const handleUseZoomAppMeetingFlow = (event) => {
+    app.handleBookFormValuesChange({ target: { name: 'useZoomAppMeetingFlow', value: event.target.checked } });
+
+    if(event.target.checked) {
+      setZoomAuthTriggered(true);
+      localStorage.setItem('book-artist-form-state', JSON.stringify({...app.bookFormValues, useZoomAppMeetingFlow: true}));
+      localStorage.setItem('url-before-redirect', location.pathname.slice(1, location.pathname.length));
+      window.location.assign(ZOOM_OAUTH_AUTHENTICATE_URL);
+    } else {
+      schema.zoomMeetingId.presence.allowEmpty = false
+    }
   }
 
   const hasError = field =>
@@ -394,67 +408,79 @@ const BookForm = props => {
             Schedule with Zoom a meeting for your event.
           </Typography>
         </Grid>
+
         <Grid item xs={12} data-aos="fade-up">
-          <Button
-            variant="contained"
-            type="submit"
-            color="secondary"
-            size="large"
-            onClick={handleScheduleZoomMeeting}
-          >
-            Schedule with Zoom
-          </Button>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={app.bookFormValues.useZoomAppMeetingFlow} onChange={handleUseZoomAppMeetingFlow}
+                name="useZoomAppMeetingFlow" />}
+              label={(
+                <>
+                  Authorize And Automatically Schedule with Zoom
+                </>
+              )}
+            />
+            {zoomAuthError &&
+              <FormHelperText error={zoomAuthError}>There is an issue using automatic flow. Kindly provide meeting ID below.</FormHelperText>
+            }
+          </FormGroup>
         </Grid>
-        <Grid item xs={12} data-aos="fade-up">
-          <Typography
-            variant="subtitle1"
-            style={{ color: theme.palette.text.light }}
-          >
-            OR provide the following details for the artist to join your event.
+
+        {!app.bookFormValues.useZoomAppMeetingFlow &&
+
+          <React.Fragment>
+            <Grid item xs={12} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                style={{ color: theme.palette.text.light }}
+              >
+                OR provide the following details for the artist to join your event.
           </Typography>
-        </Grid>
-        <Grid item xs={6} data-aos="fade-up">
-          <Typography
-            variant="subtitle1"
-            color="textPrimary"
-            className={classes.inputTitle}
-          >
-            Zoom Meeting ID*
+            </Grid>
+            <Grid item xs={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                Zoom Meeting ID*
           </Typography>
-          <TextField
-            placeholder="Zoom Meeting ID"
-            variant="outlined"
-            size="medium"
-            name="zoomMeetingId"
-            fullWidth
-            type="text"
-            value={app.bookFormValues.zoomMeetingId}
-            onChange={handleChange}
-            helperText={hasError('zoomMeetingId') ? formState.errors.zoomMeetingId[0] : null}
-            error={hasError('zoomMeetingId')}
-            className={classes.textField}
-          />
-        </Grid>
-        <Grid item xs={6} data-aos="fade-up">
-          <Typography
-            variant="subtitle1"
-            color="textPrimary"
-            className={classes.inputTitle}
-          >
-            Zoom Meeting Passcode
+              <TextField
+                placeholder="Zoom Meeting ID"
+                variant="outlined"
+                size="medium"
+                name="zoomMeetingId"
+                fullWidth
+                type="text"
+                value={app.bookFormValues.zoomMeetingId}
+                onChange={handleChange}
+                helperText={hasError('zoomMeetingId') ? formState.errors.zoomMeetingId[0] : null}
+                error={hasError('zoomMeetingId')}
+                className={classes.textField}
+              />
+            </Grid>
+            <Grid item xs={6} data-aos="fade-up">
+              <Typography
+                variant="subtitle1"
+                color="textPrimary"
+                className={classes.inputTitle}
+              >
+                Zoom Meeting Passcode
           </Typography>
-          <TextField
-            placeholder="Passcode, if any"
-            variant="outlined"
-            size="medium"
-            name="zoomMeetingPasscode"
-            fullWidth
-            type="text"
-            value={app.bookFormValues.zoomMeetingPasscode}
-            onChange={handleChange}
-            className={classes.textField}
-          />
-        </Grid>
+              <TextField
+                placeholder="Passcode, if any"
+                variant="outlined"
+                size="medium"
+                name="zoomMeetingPasscode"
+                fullWidth
+                type="text"
+                value={app.bookFormValues.zoomMeetingPasscode}
+                onChange={handleChange}
+                className={classes.textField}
+              />
+            </Grid>
+          </React.Fragment>
+        }
         {formSubmitted && !formState.isValid && (
           <Grid item xs={12} data-aos="fade-up">
             <Typography
@@ -483,6 +509,7 @@ const BookForm = props => {
             type="submit"
             color="secondary"
             size="large"
+            disabled={zoomAuthTriggered}
             onClick={handleNextStep}
           >
             Continue

@@ -43,25 +43,16 @@ const ZoomRedirect = props => {
       if (localstorageFormState) {
         localstorageFormState = JSON.parse(localstorageFormState);
 
-        const topic = localstorageFormState.firstname.length > 0 ? `${localstorageFormState.firstname}'s Event` : 'Event';
-
-        const meetingResponse = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomCreateMeeting`, {
-          code,
-          topic,
-          startTime: localStorage.getItem('event-start-time'),
-          bookDuration: localstorageFormState.bookDuration.value,
+        const zoomAuthRes = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {
+          code
         });
 
-        localstorageFormState.zoomMeetingId = meetingResponse.data.id.toString();
-        localstorageFormState.zoomMeetingPasscode = meetingResponse.data.password.toString();
+        localStorage.setItem('zoom-token', zoomAuthRes.data.zoomToken );
         app.handleSetCompleteBookFormValues({ ...localstorageFormState })
-
         const userURLBeforeRedirect = localStorage.getItem('url-before-redirect');
 
         localStorage.removeItem('book-artist-form-state')
         localStorage.removeItem('url-before-redirect');
-        localStorage.removeItem('event-start-time');
-
         goTo(history, userURLBeforeRedirect);
       } else {
         goTo(history, '');
@@ -94,7 +85,7 @@ const ZoomRedirect = props => {
           <SectionHeader
             label=""
             title=""
-            subtitle={<span>Creating Your Zoom Meeting Kindly Wait.</span>}
+            subtitle={<span>Authorizing with zoom.</span>}
             titleProps={{
               variant: 'h3',
             }}

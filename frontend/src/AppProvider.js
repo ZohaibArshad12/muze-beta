@@ -88,6 +88,7 @@ const defaultBookFormValues = {
   eventStyle: '',
   songRequests: '',
   specialRequests: '',
+  useZoomAppMeetingFlow: false,
   zoomMeetingId: '',
   zoomMeetingPasscode: '',
   bookDate: null,

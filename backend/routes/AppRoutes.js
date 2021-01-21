@@ -70,17 +70,13 @@ router.post(
   },
 );
 
-// POST /api/app/zoomCreateMeeting
-// Route for creating zoom meeting for user
+// POST /api/app/zoomAuthorize
+// Route for authorizing zoom app for user and getting accessToken
 router.post(
-  '/zoomCreateMeeting',
+  '/zoomAuthorize',
   async (req, res, next) => {
-    console.log('req.body:', req.body);
 
     const code = req.body.code;
-    const topic = req.body.topic;
-    const startTime = req.body.startTime;
-    const bookDuration = req.body.bookDuration;
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
     let headers = { Authorization: `Basic ${idSecretBase64}` };
@@ -92,7 +88,32 @@ router.post(
         { headers }
       );
       if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
-        headers = { Authorization: `Bearer ${oAuthTokenRes.data.access_token}` };
+        res.json({zoomToken: oAuthTokenRes.data.access_token})
+      } else {
+        console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
+        next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
+      }
+
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+// POST /api/app/zoomCreateMeeting
+// Route for creating zoom meeting for user
+router.post(
+  '/zoomCreateMeeting',
+  async (req, res, next) => {
+
+    const token = req.body.zoomToken;
+    const topic = req.body.topic;
+    const startTime = req.body.startTime;
+    const bookDuration = req.body.bookDuration;
+    const headers = { Authorization: `Bearer ${token}` };
+    
+    try {
+      
+        
         const body = {
           topic,
           "type": 2, // type 2 is schedules meeting
@@ -111,13 +132,11 @@ router.post(
           { headers }
         );
 
-        res.json(createMeetingRes.data)
-      } else {
-        console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
-        next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
-      }
+        console.log('meeting resp:', createMeetingRes.data);
+        res.json(createMeetingRes.data)        
 
     } catch (error) {
+      console.log('Error creating meeting:', error);
       next(error);
     }
   },
