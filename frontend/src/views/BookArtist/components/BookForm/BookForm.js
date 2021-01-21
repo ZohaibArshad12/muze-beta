@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useState } from 'react';
-import { Button, Grid, Typography, useMediaQuery,Checkbox, FormGroup, FormControlLabel, FormHelperText } from '@material-ui/core';
+import { Button, Grid, Typography, useMediaQuery,Checkbox, FormGroup, FormControlLabel } from '@material-ui/core';
 import useTheme from '@material-ui/core/styles/useTheme';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink as RouterLink, useLocation } from 'react-router-dom';
@@ -7,7 +7,6 @@ import { useApp } from '../../../../AppProvider';
 import { TextField as MuiTextField } from '@material-ui/core';
 import debouncedInput from 'components/molecules/DebouncedInput';
 import validate from 'validate.js';
-import moment from 'moment';
 
 const redirectURL = `${window.location.origin}/redirect`;
 const ZOOM_OAUTH_AUTHENTICATE_URL = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_ZOOM_APP_CLIENTID}&redirect_uri=${redirectURL}`
@@ -88,7 +87,6 @@ const BookForm = props => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [zoomAuthTriggered, setZoomAuthTriggered] = useState(false);
-  const [zoomAuthError, setZoomAuthError] = useState(false);
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -420,9 +418,6 @@ const BookForm = props => {
                 </>
               )}
             />
-            {zoomAuthError &&
-              <FormHelperText error={zoomAuthError}>There is an issue using automatic flow. Kindly provide meeting ID below.</FormHelperText>
-            }
           </FormGroup>
         </Grid>
 
