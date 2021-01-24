@@ -3,7 +3,7 @@ const { checkAccessToken, checkPermission } = require('../middleware/auth.js');
 const { Locations, ArtistTypes, ArtistGenres } = require('../models');
 const Promise = require('bluebird');
 const numbro = require('numbro');
-const axios = require('axios')
+const axios = require('axios');
 
 // Create Express Router
 const router = express.Router();
@@ -141,5 +141,41 @@ router.post(
     }
   },
 );
+
+// POST /api/app/deauthorize
+// Route for handling zoom app deauthorize webhook and invoke Zoom Data Compliance Call
+router.post('/deauthorize', async (req, res) => {
+  
+  try {
+    if (req.headers.authorization === process.env.ZOOM_APP_VERIFICATION_TOKEN) {
+      res.status(200)
+      res.send()
+
+      await axios.post(
+        `https://api.zoom.us/oauth/data/compliance`,
+        {
+          'client_id': req.body.payload.client_id,
+          'user_id': req.body.payload.user_id,
+          'account_id': req.body.payload.account_id,
+          'deauthorization_event_received': req.body.payload,
+          'compliance_completed': true
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + Buffer.from(process.env.ZOOM_APP_CLIENTID + ':' + process.env.ZOOM_APP_CLIENTSECRET).toString('base64'),
+            'cache-control': 'no-cache'
+          }
+        }
+      );
+    } else {
+      res.status(401)
+      res.send('Unauthorized request to Unsplash Chatbot for Zoom.')
+    }
+
+  } catch (error) {
+    console.log('Error Occured while zoom deauthorize', error);
+  }
+});
 
 module.exports = router;
