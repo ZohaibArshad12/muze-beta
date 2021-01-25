@@ -13,8 +13,12 @@ const router = express.Router();
  */
 router.get('/c', (req, res, next) => {
   
+  console.log(' process.env.ORIGIN::', process.env.ORIGIN);
   console.log(' req.cookies::', req.headers.cookie);
   console.log(' req.cookies::', req.cookies);
+res.cookie('c4','c4val')
+res.cookie('c5','c5val', {httpOnly: true, sameSite: 'none', secure: true})
+res.cookie('c3','c3val', {httpOnly: true, sameSite: 'none', secure: true, domain:process.env.ORIGIN})
 res.cookie('c1','c1val', {httpOnly: true})
 res.cookie('c2','c2val', {httpOnly: true, secure: true})
   // console.log( 'req.session', req.session);
