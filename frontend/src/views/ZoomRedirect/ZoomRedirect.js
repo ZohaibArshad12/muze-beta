@@ -40,14 +40,13 @@ const ZoomRedirect = props => {
     try {
 
       let localstorageFormState = localStorage.getItem('book-artist-form-state');
-      if (true || localstorageFormState) {
+      if (localstorageFormState) {
         localstorageFormState = JSON.parse(localstorageFormState);
 
-        const zoomAuthRes = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {
+        await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {
           code
         },{withCredentials: true});
 
-        localStorage.setItem('zoom-token', zoomAuthRes.data.zoomToken );
         app.handleSetCompleteBookFormValues({ ...localstorageFormState })
         const userURLBeforeRedirect = localStorage.getItem('url-before-redirect');
 

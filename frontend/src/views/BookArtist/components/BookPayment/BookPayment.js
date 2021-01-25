@@ -179,7 +179,6 @@ const BookPayment = props => {
 
     try {
       const meetingResponse = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomCreateMeeting`, {
-        zoomToken: localStorage.getItem('zoom-token'),
         topic,
         startTime: meetingStartDate,
         bookDuration: values.bookDuration.value,

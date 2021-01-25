@@ -93,7 +93,7 @@ router.post(
         // Encrypt
         const encryptedToken = CryptoJS.AES.encrypt(oAuthTokenRes.data.access_token, process.env.ZOOM_APP_CLIENTSECRET).toString();
         // Save in http only secure cookie
-        res.cookie('zoomToken', encryptedToken, {httpOnly: true, secure: true, sameSite:'none'})
+        res.cookie('zoomTokenEncrypted', encryptedToken, {httpOnly: true, secure: true, sameSite:'none'})
         res.json({resp: 'success'})
       } else {
         console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
@@ -111,7 +111,7 @@ router.post(
 router.post(
   '/zoomCreateMeeting',
   async (req, res, next) => {
-    const encryptedToken = req.cookies['zoomToken'];
+    const encryptedToken = req.cookies['zoomTokenEncrypted'];
     // Decrypt
     var bytes  = CryptoJS.AES.decrypt(encryptedToken, process.env.ZOOM_APP_CLIENTSECRET);
     const token = bytes.toString(CryptoJS.enc.Utf8);
