@@ -15,14 +15,6 @@ router.get('/c', (req, res, next) => {
   
   console.log(' req.cookies::', req.cookies);
   res.cookie('c5','c5val', {httpOnly: true, sameSite: 'none', secure: true})
-  if(req.session.data) {
-    console.log(req.session.data);
-    // res.end({asd:'asd'})
-  } else {
-    console.log('setting')
-    req.session.data = {'asdsa':"asdsa"}
-    // res.end({asd:'asd'})
-  }
   
   
   // console.log('cookiesss:', req.cookies);
@@ -97,7 +89,6 @@ router.post(
 router.post(
   '/zoomAuthorize',
   async (req, res, next) => {
-    req.session.data = '13212'
     const code = req.body.code;
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
