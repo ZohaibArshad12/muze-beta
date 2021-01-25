@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var cookieParser = require('cookie-parser')
 const AppRoutes = require("./routes/AppRoutes");
 const SearchRoutes = require("./routes/SearchRoutes");
 const ArtistRoutes = require("./routes/ArtistRoutes");
@@ -24,10 +25,15 @@ const PORT = process.env.PORT || 3005;
 const app = express();
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
-app.use(cors());
-
 // Configure headers
 app.use(setHeaders);
+
+app.use(cors({
+  origin: process.env.ORIGIN,
+  credentials: true
+  }));
+
+app.use(cookieParser());
 
 // Set routes
 app.use("/api/app", AppRoutes);

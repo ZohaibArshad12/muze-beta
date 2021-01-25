@@ -88,7 +88,8 @@ router.post(
         { headers }
       );
       if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
-        res.json({zoomToken: oAuthTokenRes.data.access_token})
+        res.cookie('zoom-authToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true})
+        res.json({resp: 'success'})
       } else {
         console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
         next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
@@ -105,7 +106,9 @@ router.post(
   '/zoomCreateMeeting',
   async (req, res, next) => {
 
-    const token = req.body.zoomToken;
+    const token = req.cookies.zoom-authToken;
+    console.log('req.cookies',req.cookies);
+    console.log('token::',token);
     const topic = req.body.topic;
     const startTime = req.body.startTime;
     const bookDuration = req.body.bookDuration;

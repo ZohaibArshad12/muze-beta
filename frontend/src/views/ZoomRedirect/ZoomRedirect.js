@@ -45,7 +45,7 @@ const ZoomRedirect = props => {
 
         const zoomAuthRes = await axios.post(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {
           code
-        });
+        },{credentials: 'include'});
 
         localStorage.setItem('zoom-token', zoomAuthRes.data.zoomToken );
         app.handleSetCompleteBookFormValues({ ...localstorageFormState })

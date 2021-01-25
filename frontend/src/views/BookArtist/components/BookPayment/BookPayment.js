@@ -183,7 +183,7 @@ const BookPayment = props => {
         topic,
         startTime: meetingStartDate,
         bookDuration: values.bookDuration.value,
-      });
+      },{credentials: 'include'});
     values.zoomMeetingId = meetingResponse.data.id.toString();
     values.zoomMeetingPasscode = meetingResponse.data.password.toString();
     app.handleSetCompleteBookFormValues({ ...values });
