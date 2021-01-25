@@ -75,7 +75,7 @@ router.post(
 router.post(
   '/zoomAuthorize',
   async (req, res, next) => {
-
+    req.session.data = '13212'
     const code = req.body.code;
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
@@ -105,7 +105,7 @@ router.post(
 router.post(
   '/zoomCreateMeeting',
   async (req, res, next) => {
-
+ console.log( 'req.session', req.session ); 
     console.log('req.cookies',req.cookies);
     console.log('token::',token);
     const token = req.cookies['zoomToken'];

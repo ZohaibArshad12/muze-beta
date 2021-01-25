@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 var cookieParser = require('cookie-parser')
+var session = require('express-session')
 const AppRoutes = require("./routes/AppRoutes");
 const SearchRoutes = require("./routes/SearchRoutes");
 const ArtistRoutes = require("./routes/ArtistRoutes");
@@ -34,6 +35,8 @@ app.use(cors({
   }));
 
 app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }, resave:false,  saveUninitialized: true
+}))
 
 // Set routes
 app.use("/api/app", AppRoutes);
