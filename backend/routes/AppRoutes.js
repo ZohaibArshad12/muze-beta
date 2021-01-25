@@ -8,6 +8,30 @@ const axios = require('axios');
 // Create Express Router
 const router = express.Router();
 
+/**
+ * GET /api/app/cookietest
+ */
+router.get('/c', (req, res, next) => {
+  
+  console.log(' req.cookies::', req.cookies);
+res.cookie('c1','c1val', {httpOnly: true})
+res.cookie('c2','c2val', {httpOnly: true, secure: true})
+  // console.log( 'req.session', req.session);
+  if(req.session.data) {
+    console.log(req.session.data);
+    // res.end({asd:'asd'})
+  } else {
+    console.log('setting')
+    req.session.data = {'asdsa':"asdsa"}
+    // res.end({asd:'asd'})
+  }
+  
+  
+  // console.log('cookiesss:', req.cookies);
+  // res.cookie('cok1','cok1val')
+  res.send({ads:'a'})
+
+}),
 
 /**
  * GET /api/app/hydrate
@@ -80,24 +104,26 @@ router.post(
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
     let headers = { Authorization: `Basic ${idSecretBase64}` };
+    res.cookie('zoomToken', 'asds')
+    //     
+    // try {
+    //   const oAuthTokenRes = await axios.post(
+    //     `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
+    //     null,
+    //     { headers }
+    //   );
+    //   if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
+    //     res.cookie('zoomToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true})
+    //     res.json({resp: 'success'})
+    //   } else {
+    //     console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
+    //     next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
+    //   }
 
-    try {
-      const oAuthTokenRes = await axios.post(
-        `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
-        null,
-        { headers }
-      );
-      if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
-        res.cookie('zoomToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true})
-        res.json({resp: 'success'})
-      } else {
-        console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
-        next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
-      }
-
-    } catch (error) {
-      next(error);
-    }
+    // } catch (error) {
+    //   next(error);
+    // }
+    res.send({as:'asd'})
   },
 );
 // POST /api/app/zoomCreateMeeting
@@ -107,8 +133,8 @@ router.post(
   async (req, res, next) => {
  console.log( 'req.session', req.session ); 
     console.log('req.cookies',req.cookies);
-    console.log('token::',token);
     const token = req.cookies['zoomToken'];
+    console.log('token::',token);
     const topic = req.body.topic;
     const startTime = req.body.startTime;
     const bookDuration = req.body.bookDuration;

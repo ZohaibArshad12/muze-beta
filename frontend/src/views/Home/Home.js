@@ -23,15 +23,27 @@ const useStyles = makeStyles(theme => ({
 const Home = () => {
   const classes = useStyles();
 
+
+  const getCookie2 = () => {
+    fetch('http://localhost:3005/api/app/c', {credentials: 'include'}).then((result) => {
+    return result.json()
+}).then((data) => {
+    //Do something
+});
+  }
+
+
   return (
     <div className={classes.root}>
-    <video className={classes.video} autoPlay loop muted>
+      <button onClick={getCookie2} >Test Cookie Get</button>
+    {/* <video className={classes.video} autoPlay loop muted>
       <source src='https://player.vimeo.com/external/500153843.hd.mp4?s=f3dcb73c184012a21738f19fda68c2ccc1eb7518&profile_id=175' type='video/mp4' />
-    </video>
+    </video> */}
       <Section>
         <Hero />
       </Section>
       <Divider />
+      
     </div>
   );
 };
