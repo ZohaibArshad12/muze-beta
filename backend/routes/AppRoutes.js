@@ -22,6 +22,17 @@ router.get('/c', (req, res, next) => {
   res.send({ads:'a'})
 
 }),
+router.post('/c2', (req, res, next) => {
+  
+  console.log(' req.cookies::', req.cookies);
+  res.cookie('c6','c6val', {httpOnly: true, sameSite: 'none', secure: true})
+  
+  
+  // console.log('cookiesss:', req.cookies);
+  // res.cookie('cok1','cok1val')
+  res.send({ads:'a'})
+
+}),
 
 /**
  * GET /api/app/hydrate
@@ -93,25 +104,25 @@ router.post(
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
     let headers = { Authorization: `Basic ${idSecretBase64}` };
-    res.cookie('zoomToken', 'asds',{httpOnly: true, sameSite: 'none', secure: true})
-    //     
-    // try {
-    //   const oAuthTokenRes = await axios.post(
-    //     `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
-    //     null,
-    //     { headers }
-    //   );
-    //   if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
-    //     res.cookie('zoomToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true})
-    //     res.json({resp: 'success'})
-    //   } else {
-    //     console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
-    //     next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
-    //   }
+    // res.cookie('zoomToken', 'asds',{httpOnly: true, sameSite: 'none', secure: true})
+        
+    try {
+      const oAuthTokenRes = await axios.post(
+        `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
+        null,
+        { headers }
+      );
+      if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
+        res.cookie('zoomToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true, sameSite:'none'})
+        res.json({resp: 'success'})
+      } else {
+        console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
+        next(`Error getting access token, Response Data: ${oAuthTokenRes.data}`);
+      }
 
-    // } catch (error) {
-    //   next(error);
-    // }
+    } catch (error) {
+      next(error);
+    }
     res.send({as:'asd'})
   },
 );
