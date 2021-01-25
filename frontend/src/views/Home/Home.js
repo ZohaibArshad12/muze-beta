@@ -27,7 +27,7 @@ const Home = () => {
 
   const getCookie2 = async () => {
 
-    await axios.get(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {withCredentials: true});
+    await axios.get(`${process.env.REACT_APP_ENDPOINT}/api/app/c`, {withCredentials: true});
 
     fetch(`${process.env.REACT_APP_ENDPOINT}/api/app/c`, {credentials: 'include'}).then((result) => {
     return result.json()
