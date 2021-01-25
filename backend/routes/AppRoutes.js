@@ -13,15 +13,8 @@ const router = express.Router();
  */
 router.get('/c', (req, res, next) => {
   
-  console.log(' process.env.ORIGIN::', process.env.ORIGIN);
-  console.log(' req.cookies::', req.headers.cookie);
   console.log(' req.cookies::', req.cookies);
-res.cookie('c4','c4val')
-res.cookie('c5','c5val', {httpOnly: true, sameSite: 'none', secure: true})
-res.cookie('c3','c3val', {httpOnly: true, sameSite: 'none', secure: true, domain:process.env.ORIGIN})
-res.cookie('c1','c1val', {httpOnly: true})
-res.cookie('c2','c2val', {httpOnly: true, secure: true})
-  // console.log( 'req.session', req.session);
+  res.cookie('c5','c5val', {httpOnly: true, sameSite: 'none', secure: true})
   if(req.session.data) {
     console.log(req.session.data);
     // res.end({asd:'asd'})
@@ -109,7 +102,7 @@ router.post(
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
     let headers = { Authorization: `Basic ${idSecretBase64}` };
-    res.cookie('zoomToken', 'asds')
+    res.cookie('zoomToken', 'asds',{httpOnly: true, sameSite: 'none', secure: true})
     //     
     // try {
     //   const oAuthTokenRes = await axios.post(
