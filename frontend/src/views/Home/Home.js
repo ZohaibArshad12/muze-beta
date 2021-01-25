@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
 import { Section } from 'components/organisms';
 import { Hero } from './components';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,8 +25,11 @@ const Home = () => {
   const classes = useStyles();
 
 
-  const getCookie2 = () => {
-    fetch('http://localhost:3005/api/app/c', {credentials: 'include'}).then((result) => {
+  const getCookie2 = async () => {
+
+    await axios.get(`${process.env.REACT_APP_ENDPOINT}/api/app/zoomAuthorize`, {withCredentials: true});
+
+    fetch(`${process.env.REACT_APP_ENDPOINT}/api/app/c`, {credentials: 'include'}).then((result) => {
     return result.json()
 }).then((data) => {
     //Do something

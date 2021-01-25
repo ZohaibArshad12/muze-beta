@@ -13,6 +13,7 @@ const router = express.Router();
  */
 router.get('/c', (req, res, next) => {
   
+  console.log(' req.cookies::', req.headers.cookie);
   console.log(' req.cookies::', req.cookies);
 res.cookie('c1','c1val', {httpOnly: true})
 res.cookie('c2','c2val', {httpOnly: true, secure: true})
