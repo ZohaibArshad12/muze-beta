@@ -4,35 +4,11 @@ const { Locations, ArtistTypes, ArtistGenres } = require('../models');
 const Promise = require('bluebird');
 const numbro = require('numbro');
 const axios = require('axios');
+var CryptoJS = require("crypto-js");
+
 
 // Create Express Router
 const router = express.Router();
-
-/**
- * GET /api/app/cookietest
- */
-router.get('/c', (req, res, next) => {
-  
-  console.log(' req.cookies::', req.cookies);
-  res.cookie('c5','c5val', {httpOnly: true, sameSite: 'none', secure: true})
-  
-  
-  // console.log('cookiesss:', req.cookies);
-  // res.cookie('cok1','cok1val')
-  res.send({ads:'a'})
-
-}),
-router.post('/c2', (req, res, next) => {
-  
-  console.log(' req.cookies::', req.cookies);
-  res.cookie('c6','c6val', {httpOnly: true, sameSite: 'none', secure: true})
-  
-  
-  // console.log('cookiesss:', req.cookies);
-  // res.cookie('cok1','cok1val')
-  res.send({ads:'a'})
-
-}),
 
 /**
  * GET /api/app/hydrate
@@ -113,7 +89,11 @@ router.post(
         { headers }
       );
       if (oAuthTokenRes.data && oAuthTokenRes.data.access_token) {
-        res.cookie('zoomToken', oAuthTokenRes.data.access_token, {httpOnly: true, secure: true, sameSite:'none'})
+      
+        // Encrypt
+        const encryptedToken = CryptoJS.AES.encrypt(oAuthTokenRes.data.access_token, process.env.ZOOM_APP_CLIENTSECRET).toString();
+        // Save in http only secure cookie
+        res.cookie('zoomToken', encryptedToken, {httpOnly: true, secure: true, sameSite:'none'})
         res.json({resp: 'success'})
       } else {
         console.log('Error getting access token, Response Data: ', oAuthTokenRes.data);
@@ -131,17 +111,16 @@ router.post(
 router.post(
   '/zoomCreateMeeting',
   async (req, res, next) => {
- console.log( 'req.session', req.session ); 
-    console.log('req.cookies',req.cookies);
-    const token = req.cookies['zoomToken'];
-    console.log('token::',token);
+    const encryptedToken = req.cookies['zoomToken'];
+    // Decrypt
+    var bytes  = CryptoJS.AES.decrypt(encryptedToken, process.env.ZOOM_APP_CLIENTSECRET);
+    const token = bytes.toString(CryptoJS.enc.Utf8);
     const topic = req.body.topic;
     const startTime = req.body.startTime;
     const bookDuration = req.body.bookDuration;
     const headers = { Authorization: `Bearer ${token}` };
     
     try {
-      
         
         const body = {
           topic,
