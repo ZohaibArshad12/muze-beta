@@ -597,7 +597,7 @@ const BookPayment = props => {
             type="submit"
             color="secondary"
             size="large"
-            disabled={!app.bookFormValues.useZoomAppMeetingFlow && !app.bookFormValues.zoomMeetingId || isSubmiting }
+            disabled={(!app.bookFormValues.useZoomAppMeetingFlow && !app.bookFormValues.zoomMeetingId) || isSubmiting }
             onClick={handleSubmit}
           >
             Continue
