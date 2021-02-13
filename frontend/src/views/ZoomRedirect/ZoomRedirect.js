@@ -62,7 +62,6 @@ const ZoomRedirect = props => {
   };
 
   useEffect(() => {
-    debugger
     const locationSearch = location.search;
     let code = locationSearch.split('?')[1];
     if (code && code.includes('code')) {

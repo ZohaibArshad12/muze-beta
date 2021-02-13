@@ -76,13 +76,13 @@ router.post(
 router.post(
   '/zoomAuthorize',
   async (req, res, next) => {
+    try {
     const code = req.body.code;
     const redirectURL = process.env.ZOOM_APP_REDIRECTURL
     const idSecretBase64 = (Buffer.from(`${process.env.ZOOM_APP_CLIENTID}:${process.env.ZOOM_APP_CLIENTSECRET}`)).toString('base64')
     let headers = { Authorization: `Basic ${idSecretBase64}` };
     // res.cookie('zoomToken', 'asds',{httpOnly: true, sameSite: 'none', secure: true})
         
-    try {
       const oAuthTokenRes = await axios.post(
         `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectURL}`,
         null,
@@ -111,6 +111,7 @@ router.post(
 router.post(
   '/zoomCreateMeeting',
   async (req, res, next) => {
+    try {
     const encryptedToken = req.cookies['zoomTokenEncrypted'];
     // Decrypt
     var bytes  = CryptoJS.AES.decrypt(encryptedToken, process.env.ZOOM_APP_CLIENTSECRET);
@@ -120,7 +121,6 @@ router.post(
     const bookDuration = req.body.bookDuration;
     const headers = { Authorization: `Bearer ${token}` };
     
-    try {
         
         const body = {
           topic,

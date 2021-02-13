@@ -79,6 +79,7 @@ const BookPayment = props => {
   const [zoomMeetingError, setZoomMeetingError] = useState('');
   const [stripeError, setStripeError] = useState('');
   const [termsHasError, setTermsHasError] = useState(false);
+  const [isSubmiting, setIsSubmiting] = useState(false);
 
   const handleTermsChange = (e) => {
     app.handleBookFormValuesChange({
@@ -94,22 +95,26 @@ const BookPayment = props => {
   };
   
   const handleSubmit = async (event) => {
+    setIsSubmiting(true)
     event.preventDefault();
     setStripeError('');
     setTermsHasError(false);
 
     if ( zoomMeetingError && !app.bookFormValues.zoomMeetingId) {
+      setIsSubmiting(false)  
       return;
     }
     
     if (!app.bookFormValues.termsAccepted) {
       setTermsHasError(true);
+      setIsSubmiting(false)  
       return;
     }
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make  sure to disable form submission until Stripe.js has loaded.
+      setIsSubmiting(false)  
       return;
     }
 
@@ -118,6 +123,7 @@ const BookPayment = props => {
       if(!success) {
         app.handleBookFormValuesChange({ target: { name: 'useZoomAppMeetingFlow', value: false } });
         setZoomMeetingError('Error occured while creating Zoom meeting automatically, Kindly provide one')
+        setIsSubmiting(false)  
         return;
       }
     }
@@ -128,8 +134,9 @@ const BookPayment = props => {
     if (result.error) {
       setStripeError(result.error.message);
     } else {
-      stripeTokenHandler(result.token, app.bookFormValues.feeTotal, `MUZE Artist Booking (${data.name} performing ${app.bookFormValues.bookDuration.name} for ${app.bookFormValues.firstname} ${app.bookFormValues.lastname})`);
+      await stripeTokenHandler(result.token, app.bookFormValues.feeTotal, `MUZE Artist Booking (${data.name} performing ${app.bookFormValues.bookDuration.name} for ${app.bookFormValues.firstname} ${app.bookFormValues.lastname})`);
     }
+    setIsSubmiting(false)  
   };
 
   async function stripeTokenHandler(token, amount, description) {
@@ -590,7 +597,7 @@ const BookPayment = props => {
             type="submit"
             color="secondary"
             size="large"
-            disabled={!app.bookFormValues.useZoomAppMeetingFlow && !app.bookFormValues.zoomMeetingId}
+            disabled={!app.bookFormValues.useZoomAppMeetingFlow && !app.bookFormValues.zoomMeetingId || isSubmiting }
             onClick={handleSubmit}
           >
             Continue

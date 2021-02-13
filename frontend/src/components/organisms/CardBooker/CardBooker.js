@@ -163,6 +163,8 @@ const CardBooker = props => {
     if (app.filterValues.date) {
       setDate(app.filterValues.date);
       setTime(app.filterValues.date);
+      app.handleBookFormValuesChange({ target: { name: 'bookDate', value: app.filterValues.date } });
+      app.handleBookFormValuesChange({ target: { name: 'bookTime', value: app.filterValues.date } });
     } else if (app.bookFormValues.bookDate) {
       setDate(app.bookFormValues.bookDate);
       setTime(app.bookFormValues.bookTime);
