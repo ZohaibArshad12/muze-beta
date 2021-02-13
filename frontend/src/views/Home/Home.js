@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
 import { Section } from 'components/organisms';
 import { Hero } from './components';
-import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {

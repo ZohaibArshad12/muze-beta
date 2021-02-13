@@ -51,6 +51,10 @@ app.use("/api/admin/locations", AdminLocationRoutes);
 app.use("/api/admin/reviews", AdminReviewRoutes);
 app.use("/api/admin/bookings", AdminBookingRoutes);
 
+app.get('/.well-known/acme-challenge/:content', function(req, res) {
+  res.send('vyg_OXlR_bTC8V_h1B98Z1-CQoF2-KgxlRWAhk4VYiE.syfpfgbD0cRng8RByCvylDwgXHJMKrib9sQUbHVUbdo')
+})
+
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({
