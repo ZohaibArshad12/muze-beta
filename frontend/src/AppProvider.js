@@ -13,6 +13,12 @@ const pages = [
     primary: true,
   },
   {
+    title: 'Concert',
+    id: 'concert',
+    href: '/concerts',
+    primary: true,
+  },
+  {
     title: 'Browse',
     id: 'browse',
     href: '/browse',
@@ -122,6 +128,7 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsLoading, setSearchResultsLoading] = useState(true);
+  const [concertSearchValue, setConcertSearchValue] = useState(null);
 
   const [data, setData] = useState({
     pages: pages,
@@ -137,7 +144,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (appQuery.data) {
-      setData((prevState) => {
+      setData(prevState => {
         let newState = Object.assign({}, prevState, appQuery.data);
         return newState;
       });
@@ -147,9 +154,9 @@ export const AppProvider = ({ children }) => {
 
   const [filterValues, setFilterValues] = useState(defaultFilterValues);
 
-  const handleFilterValuesChange = (event) => {
+  const handleFilterValuesChange = event => {
     const { name, value } = event.target;
-    setFilterValues((prevState) => {
+    setFilterValues(prevState => {
       let newValues = { ...prevState };
       newValues[name] = value;
       return newValues;
@@ -158,10 +165,10 @@ export const AppProvider = ({ children }) => {
 
   const [bookFormValues, setBookFormValues] = useState(defaultBookFormValues);
 
-  const handleBookFormValuesChange = (event) => {
+  const handleBookFormValuesChange = event => {
     const { name, value } = event.target;
 
-    setBookFormValues((prevState) => {
+    setBookFormValues(prevState => {
       let newValues = { ...prevState };
       newValues[name] = value;
       return newValues;
@@ -172,11 +179,11 @@ export const AppProvider = ({ children }) => {
     setBookFormValues(defaultBookFormValues);
   };
 
-  const handleSetCompleteBookFormValues = (newBookFormValues) => {
+  const handleSetCompleteBookFormValues = newBookFormValues => {
     setBookFormValues(newBookFormValues);
   };
 
-  const doSearch = async (paramFilterValues) => {
+  const doSearch = async paramFilterValues => {
     let myFilterValues = { ...paramFilterValues };
     if (!paramFilterValues) myFilterValues = { ...filterValues };
 
@@ -190,21 +197,21 @@ export const AppProvider = ({ children }) => {
     if (locationId || artistTypeId || artistGenreId) {
       const paramFilterValues = { ...filterValues };
       if (artistTypeId) {
-        setFilterValues((prevState) => {
+        setFilterValues(prevState => {
           const newValues = { ...prevState };
           newValues['artistType'] = data.artistTypes.find(x => x.id === parseInt(artistTypeId));
           return newValues;
         });
       }
       if (artistGenreId) {
-        setFilterValues((prevState) => {
+        setFilterValues(prevState => {
           const newValues = { ...prevState };
           newValues['artistGenre'] = data.artistGenres.find(x => x.id === parseInt(artistGenreId));
           return newValues;
         });
       }
       if (locationId) {
-        setFilterValues((prevState) => {
+        setFilterValues(prevState => {
           const newValues = { ...prevState };
           newValues['location'] = data.locations.find(x => x.id === parseInt(locationId));
           return newValues;
@@ -244,6 +251,8 @@ export const AppProvider = ({ children }) => {
         handleSearch,
         doSearch,
         handleSearchAll,
+        concertSearchValue,
+        setConcertSearchValue,
       }}
     >
       {children}

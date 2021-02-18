@@ -1,5 +1,5 @@
-const jwt = require("express-jwt");
-const jwksRsa = require("jwks-rsa");
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 function checkAccessToken(issuer, audience) {
   return jwt({
@@ -13,7 +13,7 @@ function checkAccessToken(issuer, audience) {
     // Validate the audience and the issuer.
     audience: audience,
     issuer: `https://${issuer}/`,
-    algorithms: ["RS256"],
+    algorithms: ['RS256'],
   });
 }
 
@@ -22,7 +22,7 @@ function checkPermission(providedPermissions) {
     console.log(req.user);
     const { permissions } = req.user;
     const permissionsArray = providedPermissions.map(permission => {
-      if (permissions.includes(permission)) {
+      if (permissions?.includes(permission)) {
         return true;
       }
       return false;

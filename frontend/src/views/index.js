@@ -1,4 +1,6 @@
 export { default as Home } from './Home';
+export { default as Concert } from './Concert';
+export { default as ConcertDetail } from './ConcertDetail';
 export { default as About } from './About';
 export { default as Browse } from './Browse';
 export { default as ArtistDetail } from './ArtistDetail';
