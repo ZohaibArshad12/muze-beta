@@ -87,7 +87,7 @@ const Hero = ({ data, ...props }) => {
                   <span>
                     {moment(data.concert_time)
                       .add(moment().utcOffset(), 'minutes')
-                      .format('h:m MA')}
+                      .format('h:m A')}
                   </span>
                 </Typography>
                 {data.short_description}

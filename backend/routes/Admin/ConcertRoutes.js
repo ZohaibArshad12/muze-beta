@@ -1,9 +1,9 @@
 const express = require('express');
 const { checkAccessToken, checkPermission } = require('../../middleware/auth.js');
 
-let { ArtistTypes } = require('../../models');
+let { Concerts } = require('../../models');
 
-ArtistTypes = ArtistTypes.unscoped();
+Concerts = Concerts.unscoped();
 
 // Create Express Router
 const router = express.Router();
@@ -12,10 +12,12 @@ const router = express.Router();
 router.use(checkAccessToken(process.env.AUTH0_DOMAIN, process.env.AUDIENCE));
 router.use(checkPermission(['read:database-management', 'write:database-management']));
 
-// GET /api/artist-types
-// Route for returning all artist-types
+// GET /api/concerts
+// Route for returning all concerts
 router.get('/', (req, res, next) => {
-  ArtistTypes.findAll()
+  Concerts.findAll({
+    order: [['created', 'desc']],
+  })
     .then(data => {
       res.json(data);
     })
@@ -24,10 +26,10 @@ router.get('/', (req, res, next) => {
     });
 });
 
-// GET /api/artist-types/:id
-// Route for retrieving a single artist types
+// GET /api/concerts/:id
+// Route for retrieving a single concert
 router.get('/:id', (req, res, next) => {
-  ArtistTypes.findByPk(req.params.id)
+  Concerts.findByPk(req.params.id)
     .then(data => {
       res.json(data);
     })
@@ -36,11 +38,10 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// POST /api/artist-types
-// Route for creating a new artist types
+// POST /api/concerts
+// Route for creating a new concert
 router.post('/', (req, res, next) => {
-  console.log('req.bodyreq.body::::', req.body);
-  ArtistTypes.create(req.body)
+  Concerts.create(req.body)
     .then(data => {
       res.json(data);
     })
@@ -49,33 +50,33 @@ router.post('/', (req, res, next) => {
     });
 });
 
-// PUT /api/artist-types/:id
-// Route for updating an existing artist types
+// PUT /api/concerts/:id
+// Route for updating an existing concert
 router.put('/:id', (req, res, next) => {
-  ArtistTypes.update(req.body, {
+  Concerts.update(req.body, {
     where: {
       id: req.params.id,
     },
     returning: true,
   })
     .then(data => {
-      res.json(data[1][0]);
+      res.json(data);
     })
     .catch(err => {
       next(err);
     });
 });
 
-// DELETE /api/artist-types/:id
-// Route for deleting an artist types
+// DELETE /api/concerts/:id
+// Route for deleting an concert
 router.delete('/:id', (req, res, next) => {
-  ArtistTypes.destroy({
+  Concerts.destroy({
     where: {
       id: req.params.id,
     },
   })
     .then(data => {
-      res.sendStatus(200);
+      res.json(data);
     })
     .catch(err => {
       next(err);

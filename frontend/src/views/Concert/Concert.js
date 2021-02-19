@@ -42,9 +42,7 @@ const Browse = () => {
   }, []);
 
   useEffect(() => {
-    console.log('concertQuery.data', concertQuery.data);
     if (concertQuery.data) {
-      console.log('concertQueryconcertQuery::', concertQuery.data);
       setData(concertQuery.data);
       setFilteredData(concertQuery.data);
       setLoading(false);

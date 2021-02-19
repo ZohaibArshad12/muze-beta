@@ -67,9 +67,7 @@ const ConcertDetail = () => {
   });
 
   useEffect(() => {
-    console.log('concertDetailQuery.data', concertDetailQuery.data);
     if (concertDetailQuery.data) {
-      console.log('concertQueryconcertQuery::', concertDetailQuery.data);
       setData(concertDetailQuery.data);
       setLoading(false);
     }

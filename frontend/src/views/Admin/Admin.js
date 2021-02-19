@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, List, ListItem, Grid, Typography } from '@material-ui/core';
 import { SectionAlternate, CardBase } from 'components/organisms';
-import { Hero, Artists, ArtistTypes, ArtistGenres, Locations, Reviews } from './components';
+import { Hero, Artists, ArtistTypes, ArtistGenres, Locations, Reviews, Concerts } from './components';
 import Bookings from './components/Bookings';
 
 const useStyles = makeStyles(theme => ({
@@ -65,45 +65,51 @@ const subPages = [
     id: 'artists',
     href: '/admin/artists',
     title: 'Artists',
-    subtitle: 'Manage artist details'
+    subtitle: 'Manage artist details',
   },
   {
     id: 'artist-types',
     href: '/admin/artist-types',
     title: 'Artist Types',
-    subtitle: 'Manage artist types'
+    subtitle: 'Manage artist types',
   },
   {
     id: 'artist-genres',
     href: '/admin/artist-genres',
     title: 'Genres',
-    subtitle: 'Manage genres'
+    subtitle: 'Manage genres',
   },
   {
     id: 'locations',
     href: '/admin/locations',
     title: 'Locations',
-    subtitle: 'Manage available locations'
+    subtitle: 'Manage available locations',
   },
   {
     id: 'reviews',
     href: '/admin/reviews',
     title: 'Reviews',
-    subtitle: 'Moderate artist reviews'
+    subtitle: 'Moderate artist reviews',
   },
   {
     id: 'bookings',
     href: '/admin/bookings',
     title: 'Bookings',
-    subtitle: 'Manage bookings'
-  }
+    subtitle: 'Manage bookings',
+  },
+  {
+    id: 'concerts',
+    href: '/admin/concerts',
+    title: 'Concerts',
+    subtitle: 'Manage Concerts',
+  },
 ];
 
 const TabPanel = props => {
   const { children, value, index, ...other } = props;
 
   return (
-    <Box style={{width: "100%"}} component="div" hidden={value !== index} {...other}>
+    <Box style={{ width: '100%' }} component="div" hidden={value !== index} {...other}>
       {value === index && children}
     </Box>
   );
@@ -117,9 +123,9 @@ const Admin = () => {
     pageId = 'artists';
   }
 
-  const getSubPageById = (id) => {
+  const getSubPageById = id => {
     return subPages.find(x => x.id === id);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -134,18 +140,10 @@ const Admin = () => {
                     key={index}
                     component={Link}
                     to={item.href}
-                    className={clsx(
-                      classes.listItem,
-                      pageId === item.id ? classes.listItemActive : {},
-                    )}
+                    className={clsx(classes.listItem, pageId === item.id ? classes.listItemActive : {})}
                     disableGutters
                   >
-                    <Typography
-                      variant="subtitle1"
-                      noWrap
-                      color="textSecondary"
-                      className="menu__item"
-                    >
+                    <Typography variant="subtitle1" noWrap color="textSecondary" className="menu__item">
                       {item.title}
                     </Typography>
                   </ListItem>
@@ -172,6 +170,9 @@ const Admin = () => {
               </TabPanel>
               <TabPanel value={pageId} index={'bookings'}>
                 <Bookings />
+              </TabPanel>
+              <TabPanel value={pageId} index={'concerts'}>
+                <Concerts />
               </TabPanel>
             </CardBase>
           </Grid>

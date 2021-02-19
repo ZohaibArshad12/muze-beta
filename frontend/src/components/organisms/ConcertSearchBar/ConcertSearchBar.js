@@ -134,8 +134,11 @@ const ConcertSearchBar = props => {
   const app = useApp();
 
   const handleSearch = () => {
-    console.log('filterValue::', filterValue);
     app.setConcertSearchValue(filterValue);
+  };
+  const clearSearch = () => {
+    setFilterValue(null);
+    app.setConcertSearchValue(null);
   };
 
   return (
@@ -172,12 +175,12 @@ const ConcertSearchBar = props => {
                     <IconButton
                       edge="end"
                       size="small"
-                      className={!app.filterValues.date ? 'pickerNoDate' : 'pickerHasDate'}
-                      //style={{ visibility: !app.filterValues.date ? 'hidden' : 'visible' }}
+                      className={!filterValue ? 'pickerNoDate' : 'pickerHasDate'}
+                      style={{ visibility: !filterValue ? 'hidden' : 'visible' }}
                       onClick={event => {
                         event.preventDefault();
                         event.stopPropagation();
-                        setFilterValue(null);
+                        clearSearch();
                       }}
                     >
                       <ClearIcon fontSize="small" />
@@ -192,7 +195,7 @@ const ConcertSearchBar = props => {
               className={classes.searchButton}
               size="large"
               variant="contained"
-              onClick={() => handleSearch(filterValue)}
+              onClick={handleSearch}
               color={light ? 'default' : 'secondary'}
             >
               Search

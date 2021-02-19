@@ -18,6 +18,7 @@ const AdminArtistGenreRoutes = require('./routes/Admin/ArtistGenreRoutes');
 const AdminLocationRoutes = require('./routes/Admin/LocationRoutes');
 const AdminReviewRoutes = require('./routes/Admin/ReviewRoutes');
 const AdminBookingRoutes = require('./routes/Admin/BookingRoutes');
+const AdminConcertRoutes = require('./routes/Admin/ConcertRoutes');
 const db = require('./models');
 const { setHeaders } = require('./middleware');
 
@@ -54,6 +55,7 @@ app.use('/api/admin/artist-genres', AdminArtistGenreRoutes);
 app.use('/api/admin/locations', AdminLocationRoutes);
 app.use('/api/admin/reviews', AdminReviewRoutes);
 app.use('/api/admin/bookings', AdminBookingRoutes);
+app.use('/api/admin/concerts', AdminConcertRoutes);
 
 app.get('/.well-known/acme-challenge/:content', function (req, res) {
   res.send('vyg_OXlR_bTC8V_h1B98Z1-CQoF2-KgxlRWAhk4VYiE.syfpfgbD0cRng8RByCvylDwgXHJMKrib9sQUbHVUbdo');
