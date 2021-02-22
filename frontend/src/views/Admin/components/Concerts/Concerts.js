@@ -43,7 +43,7 @@ const Concerts = props => {
       render: rowData =>
         moment(rowData.concert_time)
           .add(moment().utcOffset(), 'minutes')
-          .format('h:m A'),
+          .format('h:mm A'),
     },
     { title: 'Rate', field: 'rate', render: rowData => `$${rowData.rate}` },
     {

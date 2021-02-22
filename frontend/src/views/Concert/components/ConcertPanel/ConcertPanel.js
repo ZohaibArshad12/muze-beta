@@ -173,7 +173,7 @@ const ConcertPanel = props => {
           {' '}
           {moment(concert.concert_time)
             .add(moment().utcOffset(), 'minutes')
-            .format('h:m A')}
+            .format('h:mm A')}
         </span>
       </Typography>
 
@@ -186,7 +186,14 @@ const ConcertPanel = props => {
       <div className={classes.list}>
         <div className={classes.rateSection}>
           <Typography color="textPrimary" variant="h6" className={classes.rate}>
-            <span>${concert.rate}</span> <span className={classes.rateCaption}>per ticket</span>
+            {!concert.rate ? (
+              <span> Free</span>
+            ) : (
+              <>
+                <span> ${concert.rate}</span>
+                <span className={classes.rateCaption}>per ticket</span>
+              </>
+            )}
           </Typography>
           <Typography component={CustomRouterLink} to={`/concerts/${concert.id}`} className={classes.moreInfo}>
             more info

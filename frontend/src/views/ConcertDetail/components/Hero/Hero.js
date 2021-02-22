@@ -87,7 +87,7 @@ const Hero = ({ data, ...props }) => {
                   <span>
                     {moment(data.concert_time)
                       .add(moment().utcOffset(), 'minutes')
-                      .format('h:m A')}
+                      .format('h:mm A')}
                   </span>
                 </Typography>
                 {data.short_description}
@@ -98,7 +98,14 @@ const Hero = ({ data, ...props }) => {
                 <Divider style={{ margin: theme.spacing(2, 4, 3, 0) }} />
                 <Box display="flex" justifyContent="space-between">
                   <Typography color="textPrimary" variant="h4" className={classes.rate}>
-                    <span>${data.rate}</span> <span className={classes.rateCaption}>per ticket</span>
+                    {!data.rate ? (
+                      <span> Free</span>
+                    ) : (
+                      <>
+                        <span> ${data.rate}</span>
+                        <span className={classes.rateCaption}>per ticket</span>
+                      </>
+                    )}{' '}
                   </Typography>
                   <Button href={data.on_zoom_url} target="_blank" variant="contained" color="secondary">
                     Buy Now
