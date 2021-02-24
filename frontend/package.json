@@ -56,6 +56,7 @@
     "react-cookie-consent": "^3.0.0",
     "react-countup": "^4.3.3",
     "react-dom": "^16.8.6",
+    "react-facebook-pixel": "^1.0.4",
     "react-lazy-load-image-component": "^1.5.0",
     "react-leaflet": "^2.7.0",
     "react-lorem-ipsum": "^1.4.7",

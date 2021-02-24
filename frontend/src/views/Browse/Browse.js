@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Section, SectionAlternate } from 'components/organisms';
-import {
-  Hero,
-  ArtistPanel,
-} from './components';
+import { Hero, ArtistPanel } from './components';
 
 import { useApp } from '../../AppProvider';
 import Loading from '../../components/organisms/Loading';
@@ -42,6 +39,14 @@ const Browse = () => {
     }
     doInitialSearch();
   }, [locationId, artistTypeId, artistGenreId, app.loading]); //eslint-disable-line
+
+  useEffect(() => {
+    try {
+      app.ReactPixel.pageView();
+    } catch (error) {
+      console.log('Error using ReactPixel.pageView: ', error);
+    }
+  }, [app.ReactPixel]);
 
   return React.useMemo(() => {
     return (

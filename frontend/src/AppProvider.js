@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import ReactPixel from 'react-facebook-pixel';
+
+const options = {
+  autoConfig: true, // set pixel's autoConfig. More info: https://developers.facebook.com/docs/facebook-pixel/advanced/
+  debug: true, // enable logs
+};
+ReactPixel.init(process.env.REACT_APP_FACEBOOK_PIXEL_ID, {}, options);
 
 export const AppContext = React.createContext();
 export const useApp = () => useContext(AppContext);
@@ -253,6 +260,7 @@ export const AppProvider = ({ children }) => {
         handleSearchAll,
         concertSearchValue,
         setConcertSearchValue,
+        ReactPixel,
       }}
     >
       {children}
