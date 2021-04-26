@@ -488,7 +488,7 @@ const AddEditDialog = ({ open, data, mode, endpoint, handleClose, handleRefresh,
                       label="Date"
                       name="concert_time"
                       className={clsx(classes.datePicker, classes.textField)}
-                      value={formValues.concert_time ? formValues.concert_time : null}
+                      value={ formValues.concert_time ? moment(formValues.concert_time).add(moment().utcOffset(), 'minutes').format('YYYY-MM-DDTHH:mm:ss') : null}
                       onChange={value => {
                         setFormValues(prevState => {
                           let newValues = { ...prevState };

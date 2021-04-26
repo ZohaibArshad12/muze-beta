@@ -1,3 +1,4 @@
+const moment = require('moment');
 module.exports = (sequelize, DataTypes) => {
   const { TEXT, INTEGER, DECIMAL, DATE, BOOLEAN } = DataTypes;
   const Concerts = sequelize.define(
@@ -59,6 +60,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       concert_time: {
         type: DATE,
+        get: function () {
+          return moment(this.getDataValue('concert_time')).format('YYYY-MM-DDTHH:mm:ss');
+        },
       },
       on_zoom_url: {
         type: TEXT,
