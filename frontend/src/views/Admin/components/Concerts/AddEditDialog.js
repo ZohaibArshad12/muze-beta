@@ -140,6 +140,7 @@ const AddEditDialog = ({ open, data, mode, endpoint, handleClose, handleRefresh,
 
   const [errorMessages, setErrorMessages] = useState({});
   const [tabNum, setTabNum] = useState(0);
+  const [concertTime, setConcertTime] = useState(null);
 
   useEffect(() => {
     setTabNum(0);
@@ -153,6 +154,7 @@ const AddEditDialog = ({ open, data, mode, endpoint, handleClose, handleRefresh,
       hasErrors.current = false;
       setErrorMessages({});
       setFormValues(data);
+      setConcertTime(data.concert_time? moment(data.concert_time).add(moment().utcOffset(), 'minutes').format('YYYY-MM-DDTHH:mm:ss') : null)
     }
   }, [open, data]);
 
@@ -488,8 +490,9 @@ const AddEditDialog = ({ open, data, mode, endpoint, handleClose, handleRefresh,
                       label="Date"
                       name="concert_time"
                       className={clsx(classes.datePicker, classes.textField)}
-                      value={ formValues.concert_time ? moment(formValues.concert_time).add(moment().utcOffset(), 'minutes').format('YYYY-MM-DDTHH:mm:ss') : null}
+                      value={concertTime}
                       onChange={value => {
+                        setConcertTime(value)
                         setFormValues(prevState => {
                           let newValues = { ...prevState };
                           newValues.concert_time = value;
