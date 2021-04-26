@@ -153,8 +153,10 @@ const AddEditDialog = ({ open, data, mode, endpoint, handleClose, handleRefresh,
       }
       hasErrors.current = false;
       setErrorMessages({});
-      setFormValues(data);
-      setConcertTime(data.concert_time? moment(data.concert_time).add(moment().utcOffset(), 'minutes').format('YYYY-MM-DDTHH:mm:ss') : null)
+      const timeZoneCorrectedTime = data.concert_time? moment(data.concert_time).add(moment().utcOffset(), 'minutes').format('YYYY-MM-DDTHH:mm:ss') : null;
+      setConcertTime(timeZoneCorrectedTime);
+      setFormValues({...data, concert_time: timeZoneCorrectedTime});
+      
     }
   }, [open, data]);
 
